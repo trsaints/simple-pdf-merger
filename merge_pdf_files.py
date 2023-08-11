@@ -34,9 +34,13 @@ def merge_pdfs():
 
 		if next_pdf.startswith(pdf_name):
 			current_file_group.append(next_pdf)
-			print(current_file_group)
-			next
+		else:
+			current_file_group = []
+			current_file_group.append(next_pdf)
+			pdf_name = next_pdf.replace(".pdf", "")
 	
+		print(current_file_group)
+
 	print(pdfs)
 
 merge_pdfs()
