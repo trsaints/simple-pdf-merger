@@ -31,6 +31,15 @@ def merge_pdfs():
     
 		if next_index >= len(pdfs): 
 			print(Template("Merging the following files: ${files}").substitute(files = current_file_group))
+			
+			result = fitz.open()
+		
+			for pdf in current_file_group:
+				with fitz.open(pdf) as mfile:
+					result.insert_pdf(mfile)
+
+			result.save(Template("./results/${result}.pdf").substitute(result = pdf_name)) 				
+
 			break
 
 		next_pdf = pdfs[next_index]
@@ -39,6 +48,15 @@ def merge_pdfs():
 			current_file_group.append(next_pdf)
 		else:	
 			print(Template("Merging the following files: ${files}").substitute(files = current_file_group))
+
+			result = fitz.open()
+		
+			for pdf in current_file_group:
+				with fitz.open(pdf) as mfile:
+					result.insert_pdf(mfile)
+
+			result.save(Template("./results/${result}.pdf").substitute(result = pdf_name)) 				
+
 			current_file_group = []
 			current_file_group.append(next_pdf)
 
