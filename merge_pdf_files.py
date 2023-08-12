@@ -7,7 +7,7 @@ def initialize():
 	pdf_name = ""
 	current_file_group = []
    	
-	pdf_name = pdfs[0].replace(".pdf", "")
+	pdf_name = set_name(pdfs)
 	current_file_group.append(pdfs[0])
 
 	for current_pdf in pdfs:
@@ -33,7 +33,7 @@ def initialize():
 			current_file_group = []
 			current_file_group.append(next_pdf)
 
-			pdf_name = next_pdf.replace(".pdf", "")
+			pdf_name = set_name(current_file_group)
 
 def get_files():
 	files = []
@@ -55,6 +55,9 @@ def get_files():
 
 	pdfs.sort(key=lambda x: x.replace(".pdf", ""))
 	return pdfs
+
+def set_name(files):
+	return files[0].replace(".pdf", "")
 
 def merge_pdfs(files, pdf_name):
 	result = fitz.open()
