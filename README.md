@@ -2,7 +2,7 @@
 
 # dependencies
 
-This project was built in python 3.11.4 and it uses the pyMuPdf library in order to process PDF files. For more detailed information, please visit [the official repository(https://github.com/pymupdf/PyMuPDF)]
+This project was built in python 3.11.4 and it uses the pyMuPdf library in order to process PDF files. For more detailed information, please visit [the official repository][https://github.com/pymupdf/PyMuPDF]
 
 ## windows install
 
