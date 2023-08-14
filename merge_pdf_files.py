@@ -2,8 +2,14 @@ from os import walk
 from string import Template
 import fitz
 
-def initialize():
-	pdfs = get_files()
+def initialize(origin, destination):
+	pdfs = get_files(origin)
+
+	if len(pdfs) == 0:
+		print("There are no PDF files to process in the current directory. Operation finished")
+		
+		return	
+
 	pdf_name = ""
 	current_file_group = []
    	
@@ -14,10 +20,16 @@ def initialize():
 		current_index = pdfs.index(current_pdf)
 		next_index = current_index + 1
     
-		if next_index >= len(pdfs): 
-			print(Template("Merging the following files: ${files}").substitute(files = current_file_group))
+		if next_index >= len(pdfs):
+			message = Template("Merging the following files: ${files}").substitute(files = current_file_group)
+			print(message)
 			
-			merge_pdfs(current_file_group, pdf_name)
+			merge_pdfs(
+				current_file_group, 
+				pdf_name, 
+				origin, 
+				destination
+			)
 			
 			break
 
@@ -26,20 +38,26 @@ def initialize():
 		if next_pdf.startswith(pdf_name):
 			current_file_group.append(next_pdf)
 		else:	
-			print(Template("Merging the following files: ${files}").substitute(files = current_file_group))
+			message = Template("Merging the following files: ${files}").substitute(files = current_file_group)
+			print(message)
 
-			merge_pdfs(current_file_group, pdf_name)
+			merge_pdfs(
+				current_file_group,
+				pdf_name,
+				origin, 
+				destination
+			)
 
 			current_file_group = []
 			current_file_group.append(next_pdf)
 
 			pdf_name = set_name(current_file_group)
 
-def get_files():
+def get_files(origin):
 	files = []
 	pdfs = []
 
-	for (dirpath, dirnames, filenames) in walk("./"):
+	for (dirpath, dirnames, filenames) in walk(origin):
 		files.extend(filenames)
 
 		break
@@ -48,24 +66,18 @@ def get_files():
 		if current_file.endswith(".pdf"):
 			pdfs.append(current_file)
 
-	if len(pdfs) == 0:
-		print("There are no PDF files to process in the current directory. Operation finished")
-
-		exit()
-
 	pdfs.sort(key=lambda x: x.replace(".pdf", ""))
 	return pdfs
 
 def set_name(files):
 	return files[0].replace(".pdf", "")
 
-def merge_pdfs(files, pdf_name):
+def merge_pdfs(files, pdf_name, origin, destination):
 	result = fitz.open()
 		
 	for pdf in files:
-		with fitz.open(pdf) as mfile:
+		pdf_path = Template("${origin_path}/${file}").substitute(origin_path = origin, file = pdf)
+		with fitz.open(pdf_path) as mfile:
 			result.insert_pdf(mfile)
 
-	result.save(Template("./results/${name}.pdf").substitute(name = pdf_name)) 				
-
-initialize()
+	result.save(Template("${directory}/${name}.pdf").substitute(directory = destination, name = pdf_name)) 				
