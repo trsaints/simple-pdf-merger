@@ -15,12 +15,12 @@ class Application(tk.Frame):
 
 		self.main_font = tk_font.Font(
 			family='Segoe UI', 
-			size=14, 
+			size=12, 
 			weight='normal'
 		)
 		self.mono_font = tk_font.Font(
-			family='JetBrains Mono',
-			size=12,
+			family='Cascadia Mono',
+			size=10,
 			weight='normal'
 		)
 		self.origin_str_var = tk.StringVar(
@@ -37,15 +37,27 @@ class Application(tk.Frame):
 		self.render_widgets()
 
 	def create_widgets(self):
+		self.origin_label_frame = tk.LabelFrame(
+			self,
+			labelanchor="nw",
+			text="Pasta de origem",
+			bg="#e2dfe0"
+		)
+		self.destination_label_frame = tk.LabelFrame(
+			self,
+			labelanchor="nw",
+			text="Pasta de destino",
+			bg="#e2dfe0"
+		)
 		self.origin_button = tk.Button(
-			self, 
+			self.origin_label_frame, 
 			text='Selecionar pasta de origem', 
 			font=self.main_font, 
 			command=self.get_origin_directory,
 			bg="#bcb3b3"
 		)
 		self.destination_button = tk.Button(
-			self, 
+			self.destination_label_frame, 
 			text='Selecionar pasta de destino', 
 			font=self.main_font, 
 			command=self.get_destination_directory,
@@ -59,18 +71,20 @@ class Application(tk.Frame):
 			bg="#48bf84"
 		)
 		self.origin_display = tk.Message(
-			self,
+			self.origin_label_frame,
 			textvariable = self.origin_str_var,
 			font=self.mono_font,
 			padx=8,
-			pady=4
+			pady=4,
+			width=1024
 		)
 		self.destination_display = tk.Message(
-			self,
+			self.destination_label_frame,
 			textvariable = self.destination_str_var,
 			font=self.mono_font,
 			padx=8,
-			pady=4
+			pady=4,
+			width=1024
 		)			
 
 	def render_widgets(self):	
@@ -102,15 +116,27 @@ class Application(tk.Frame):
 			row=0,
 			column=5,
 			padx=12,
-			pady=8
+			pady=8,
 		)
 		self.destination_display.grid(
 			row=1,
 			column=5,
 			padx=12,
+			pady=8,
+		)
+		self.origin_label_frame.grid(
+			row=0,
+			column=1,
+			padx=12,
 			pady=8
-		)		
-		
+		)	
+		self.destination_label_frame.grid(
+			row=1,
+			column=1,
+			padx=12,
+			pady=8
+		)
+
 	def get_origin_directory(self):
 		self.origin_path = askdirectory(title='Selecione a pasta com os arquivos a serem unificados')
 		message = Template("Origin folder: ${origin}").substitute(origin=self.origin_path)
