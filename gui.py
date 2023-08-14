@@ -18,6 +18,19 @@ class Application(tk.Frame):
 			size=14, 
 			weight='normal'
 		)
+		self.mono_font = tk_font.Font(
+			family='JetBrains Mono',
+			size=12,
+			weight='normal'
+		)
+		self.origin_str_var = tk.StringVar(
+			self,
+			value="Nenhuma pasta selecionada"
+		)
+		self.destination_str_var = tk.StringVar(
+			self,
+			value="Nenhuma pasta selecionada"
+		)
 
 		self.grid()
 		self.create_widgets()
@@ -45,6 +58,20 @@ class Application(tk.Frame):
 			command = self.merge_files,
 			bg="#48bf84"
 		)
+		self.origin_display = tk.Message(
+			self,
+			textvariable = self.origin_str_var,
+			font=self.mono_font,
+			padx=8,
+			pady=4
+		)
+		self.destination_display = tk.Message(
+			self,
+			textvariable = self.destination_str_var,
+			font=self.mono_font,
+			padx=8,
+			pady=4
+		)			
 
 	def render_widgets(self):	
 		self.origin_button.grid(
@@ -71,18 +98,41 @@ class Application(tk.Frame):
 			pady=8, 
 			sticky=tk.E+tk.W
 		)
-
+		self.origin_display.grid(
+			row=0,
+			column=5,
+			padx=12,
+			pady=8
+		)
+		self.destination_display.grid(
+			row=1,
+			column=5,
+			padx=12,
+			pady=8
+		)		
+		
 	def get_origin_directory(self):
 		self.origin_path = askdirectory(title='Selecione a pasta com os arquivos a serem unificados')
 		message = Template("Origin folder: ${origin}").substitute(origin=self.origin_path)
 
 		print(message)
 
+		self.update_path_display("origin")
+
 	def get_destination_directory(self):
 		self.destination_path = askdirectory(title='Selecione onde deseja armazenar os arquivos unificados')
 		message = Template("Destination folder: ${destination}").substitute(destination=self.destination_path)
 
 		print(message)
+
+		self.update_path_display("destination")
+
+	def update_path_display(self, target):
+		if target == "origin":
+			self.origin_str_var.set(self.origin_path)
+
+		if target == "destination":
+			self.destination_str_var.set(self.destination_path)
 
 	def render_selection_error(self, target):		
 		if target == "origin":
