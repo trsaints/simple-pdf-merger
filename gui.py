@@ -1,8 +1,9 @@
 import tkinter as tk
 import tkinter.font as tk_font
+import merge_pdf_files as file_merger
 from tkinter.filedialog import askdirectory
 from tkinter.messagebox import showwarning, showerror, showinfo
-import merge_pdf_files as file_merger
+from string import Template
 
 class Application(tk.Frame):
 	def __init__(self, master=None):
@@ -73,11 +74,15 @@ class Application(tk.Frame):
 
 	def get_origin_directory(self):
 		self.origin_path = askdirectory(title='Selecione a pasta com os arquivos a serem unificados')
-		print(self.origin_path)
+		message = Template("Origin folder: ${origin}").substitute(origin=self.origin_path)
+
+		print(message)
 
 	def get_destination_directory(self):
 		self.destination_path = askdirectory(title='Selecione onde deseja armazenar os arquivos unificados')
-		print(self.destination_path)
+		message = Template("Destination folder: ${destination}").substitute(destination=self.destination_path)
+
+		print(message)
 
 	def render_selection_error(self, target):		
 		if target == "origin":
