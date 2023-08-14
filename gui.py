@@ -171,3 +171,9 @@ class Application(tk.Frame):
 			destination=self.destination_path
 		)		
 
+		info_message = Template("Seus arquivos foram unificados com sucesso. Você pode encontrá-los em ${destination}").substitute(destination = self.destination_path)
+
+		showinfo(
+			title="Operação concluída.",
+			message=info_message
+        )
