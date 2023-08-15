@@ -18,6 +18,11 @@ class Application(tk.Frame):
 			size=12, 
 			weight='normal'
 		)
+		self.main_font_bold = tk_font.Font(
+			family="Segoe UI",
+			size=12,
+			weight="bold"
+		)
 		self.mono_font = tk_font.Font(
 			family='Cascadia Mono',
 			size=10,
@@ -40,25 +45,27 @@ class Application(tk.Frame):
 		self.origin_label_frame = tk.LabelFrame(
 			self,
 			labelanchor="nw",
+			font=self.main_font_bold,
 			text="Pasta de origem",
 			bg="#e2dfe0"
 		)
 		self.destination_label_frame = tk.LabelFrame(
 			self,
 			labelanchor="nw",
+			font=self.main_font_bold,
 			text="Pasta de destino",
 			bg="#e2dfe0"
 		)
 		self.origin_button = tk.Button(
 			self.origin_label_frame, 
-			text='Selecionar pasta de origem', 
+			text='Selecionar pasta', 
 			font=self.main_font, 
 			command=self.get_origin_directory,
 			bg="#bcb3b3"
 		)
 		self.destination_button = tk.Button(
 			self.destination_label_frame, 
-			text='Selecionar pasta de destino', 
+			text='Selecionar pasta', 
 			font=self.main_font, 
 			command=self.get_destination_directory,
 			bg="#bcb3b3"
@@ -76,7 +83,8 @@ class Application(tk.Frame):
 			font=self.mono_font,
 			padx=8,
 			pady=4,
-			width=1024
+			width=1024,
+			aspect=100
 		)
 		self.destination_display = tk.Message(
 			self.destination_label_frame,
@@ -84,7 +92,8 @@ class Application(tk.Frame):
 			font=self.mono_font,
 			padx=8,
 			pady=4,
-			width=1024
+			width=1024,
+			aspect=100
 		)			
 
 	def render_widgets(self):	
@@ -106,7 +115,7 @@ class Application(tk.Frame):
 		)
 		self.merge_button.grid(
 			row=2, 
-			column=2, 
+			column=0, 
 			columnspan=3, 
 			padx=12, 
 			pady=8, 
@@ -128,13 +137,15 @@ class Application(tk.Frame):
 			row=0,
 			column=1,
 			padx=12,
-			pady=8
+			pady=8,
+			sticky=tk.NW
 		)	
 		self.destination_label_frame.grid(
 			row=1,
 			column=1,
 			padx=12,
-			pady=8
+			pady=8,
+			sticky=tk.NW
 		)
 
 	def get_origin_directory(self):
