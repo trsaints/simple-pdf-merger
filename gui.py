@@ -28,14 +28,6 @@ class Application(tk.Frame):
 			size=10,
 			weight='normal'
 		)
-		self.origin_str_var = tk.StringVar(
-			self,
-			value="Nenhuma pasta selecionada"
-		)
-		self.destination_str_var = tk.StringVar(
-			self,
-			value="Nenhuma pasta selecionada"
-		)
 
 		self.grid()
 		self.create_widgets()
@@ -77,31 +69,20 @@ class Application(tk.Frame):
 			command = self.merge_files,
 			bg="#48bf84"
 		)
-		self.origin_display = tk.Message(
+		self.origin_display = tk.Text(
 			self.origin_label_frame,
-			textvariable = self.origin_str_var,
 			font=self.mono_font,
 			padx=8,
 			pady=4,
-			width=1024,
-			aspect=100
+			state="disabled"
 		)
 		self.destination_display = tk.Message(
 			self.destination_label_frame,
-			textvariable = self.destination_str_var,
 			font=self.mono_font,
 			padx=8,
 			pady=4,
 			width=1024,
-			aspect=100
-		)
-		self.origin_display_scroll = tk.Scrollbar(
-			self.origin_label_frame,
-			orient=tk.HORIZONTAL
-		)
-		self.destination_display_scroll = tk.Scrollbar(
-			self.destination_label_frame,
-			orient=tk.HORIZONTAL
+			state="disabled"
 		)
 		
 	def render_widgets(self):	
@@ -140,16 +121,6 @@ class Application(tk.Frame):
 			column=5,
 			padx=12,
 			pady=8,
-		)
-		self.origin_display_scroll.grid(
-			row=1,
-			column=5,
-			sticky=tk.E+tk.W
-		)
-		self.destination_display_scroll.grid(
-			row=2,
-			column=5,
-			sticky=tk.E+tk.W
 		)
 		self.origin_label_frame.grid(
 			row=0,
