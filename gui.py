@@ -37,6 +37,15 @@ class Application(tk.Frame):
 		self.create_widgets()
 		self.render_widgets()
 
+		self.update_static_display(
+			self.origin_display,
+			"Nenhuma pasta selecionada"
+		)
+		self.update_static_display(
+			self.destination_display,
+			"Nenhuma pasta selecionada"
+		)
+
 	def create_widgets(self):
 		self.origin_label_frame = tk.LabelFrame(
 			self,
@@ -167,7 +176,7 @@ class Application(tk.Frame):
 		elif target == "destination":
 			self.destination_path = target_path
 
-	def update_path_display(self, target, path):
+	def update_static_display(self, target, text):
 		target.configure(state = "normal")
 		target.delete(
 			"1.00",
@@ -175,17 +184,17 @@ class Application(tk.Frame):
 		)
 		target.insert(
 			"end",
-			path
+			text
 		)
 		target.configure(state = "disabled")
 
 	def set_origin(self):
 		self.set_path("origin")
-		self.update_path_display(self.origin_display, self.origin_path)
+		self.update_static_display(self.origin_display, self.origin_path)
 
 	def set_destination(self):
 		self.set_path("destination")
-		self.update_path_display(self.destination_display, self.destination_path)	
+		self.update_static_display(self.destination_display, self.destination_path)	
 	
 	def render_selection_error(self, target):		
 		if target == "origin":
