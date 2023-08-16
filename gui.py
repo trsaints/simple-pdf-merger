@@ -10,7 +10,9 @@ class Application(tk.Frame):
 		tk.Frame.__init__(
 			self, 
 			master,
-			bg="#e2dfe0"
+			bg="#e2dfe0",
+			padx=12,
+			pady=6
 		)
 
 		self.main_font = tk_font.Font(
@@ -25,11 +27,13 @@ class Application(tk.Frame):
 		)
 		self.mono_font = tk_font.Font(
 			family='Cascadia Mono',
-			size=10,
+			size=9,
 			weight='normal'
 		)
 
-		self.grid()
+		self.grid(
+			sticky=tk.N+tk.E+tk.S+tk.W
+		)
 		self.create_widgets()
 		self.render_widgets()
 
@@ -67,14 +71,14 @@ class Application(tk.Frame):
 			text='Unificar PDFs', 
 			font=self.main_font, 
 			command = self.merge_files,
-			bg="#48bf84"
+			bg="#48bf84",
 		)
 		self.origin_display = tk.Text(
 			self.origin_label_frame,
 			font=self.mono_font,
 			padx=8,
 			pady=4,
-			width=128,
+			width=100,
 			height=1,
 			state="disabled"
 		)
@@ -83,7 +87,7 @@ class Application(tk.Frame):
 			font=self.mono_font,
 			padx=8,
 			pady=4,
-			width=128,
+			width=100,
 			height=1,
 			state="disabled"
 		)
@@ -95,6 +99,7 @@ class Application(tk.Frame):
 			columnspan=3, 
 			padx=12, 
 			pady=8, 
+			ipadx=8,
 			sticky=tk.E+tk.W
 		)
 		self.destination_button.grid(
@@ -103,6 +108,7 @@ class Application(tk.Frame):
 			columnspan=3, 
 			padx=12, 
 			pady=8, 
+			ipadx=8,
 			sticky=tk.E+tk.W
 		)
 		self.merge_button.grid(
@@ -115,13 +121,13 @@ class Application(tk.Frame):
 		)
 		self.origin_display.grid(
 			row=0,
-			column=5,
+			column=1,
 			padx=12,
 			pady=8,
 		)
 		self.destination_display.grid(
 			row=1,
-			column=5,
+			column=1,
 			padx=12,
 			pady=8,
 		)
