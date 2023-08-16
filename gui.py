@@ -52,14 +52,14 @@ class Application(tk.Frame):
 			self.origin_label_frame, 
 			text='Selecionar pasta', 
 			font=self.main_font, 
-			command=self.get_origin_directory,
+			command=self.set_origin,
 			bg="#bcb3b3"
 		)
 		self.destination_button = tk.Button(
 			self.destination_label_frame, 
 			text='Selecionar pasta', 
 			font=self.main_font, 
-			command=self.get_destination_directory,
+			command=self.set_destination,
 			bg="#bcb3b3"
 		)
 		self.merge_button = tk.Button(
@@ -74,14 +74,17 @@ class Application(tk.Frame):
 			font=self.mono_font,
 			padx=8,
 			pady=4,
+			width=128,
+			height=1,
 			state="disabled"
 		)
-		self.destination_display = tk.Message(
+		self.destination_display = tk.Text(
 			self.destination_label_frame,
 			font=self.mono_font,
 			padx=8,
 			pady=4,
-			width=1024,
+			width=128,
+			height=1,
 			state="disabled"
 		)
 		
@@ -137,37 +140,54 @@ class Application(tk.Frame):
 			sticky=tk.NW
 		)
 
-	def get_origin_directory(self):
-		self.origin_path = askdirectory(title='Selecione a pasta com os arquivos a serem unificados')
-		message = Template("Origin folder: ${origin}").substitute(origin=self.origin_path)
-
-		print(message)
-
-		self.update_path_display("origin")
-
-	def get_destination_directory(self):
-		self.destination_path = askdirectory(title='Selecione onde deseja armazenar os arquivos unificados')
-		message = Template("Destination folder: ${destination}").substitute(destination=self.destination_path)
-
-		print(message)
-
-		self.update_path_display("destination")
-
-	def update_path_display(self, target):
+	def get_path_message(self, target):
 		if target == "origin":
-			self.origin_str_var.set(self.origin_path)
+			return "Selecione a pasta com os arquivos a serem unificados"
+		elif target == "destination":
+			return "Selecione a pasta de destino"
+	
+		return ""
+	
+	def get_path(self, target):
+		dialog_message = self.get_path_message(target)
+		target_path = askdirectory(title=dialog_message)
+		return target_path
 
-		if target == "destination":
-			self.destination_str_var.set(self.destination_path)
+	def set_path(self, target):
+		target_path = self.get_path(target)
+		
+		if target == "origin":
+			self.origin_path = target_path
+		elif target == "destination":
+			self.destination_path = target_path
 
+	def update_path_display(self, target, path):
+		target.configure(state = "normal")
+		target.delete(
+			"1.00",
+			"end"
+		)
+		target.insert(
+			"end",
+			path
+		)
+		target.configure(state = "disabled")
+
+	def set_origin(self):
+		self.set_path("origin")
+		self.update_path_display(self.origin_display, self.origin_path)
+
+	def set_destination(self):
+		self.set_path("destination")
+		self.update_path_display(self.destination_display, self.destination_path)	
+	
 	def render_selection_error(self, target):		
 		if target == "origin":
 			showerror(
 				title="Falha ao unificar arquivos",
 				message="Nenhuma pasta de origem foi selecionada"
 			)
-
-		if target == "destination":
+		elif target == "destination":
 			showerror(
 				title="Falha ao unificar arquivos",
 				message="Nenhuma pasta de destino foi selecionada"
@@ -175,8 +195,8 @@ class Application(tk.Frame):
 	
 	def check_selection(self):
 		origin_status = getattr(self, "origin_path", None)
-		destination_status = getattr(self, "destination_path", None)	
-
+		destination_status = getattr(self, "destination_path", None)
+	
 		if origin_status == None:
 			self.render_selection_error("origin")
 			return False
