@@ -1,11 +1,11 @@
 import tkinter as tk
 import tkinter.font as tk_font
-import merge_pdf_files as file_merger
+import file_merger
 from tkinter.filedialog import askdirectory
 from tkinter.messagebox import showwarning, showerror, showinfo
 from string import Template
 
-class Application(tk.Frame):
+class ApplicationGUI(tk.Frame):
 	def __init__(self, master = None):
 		tk.Frame.__init__(
 			self, 
