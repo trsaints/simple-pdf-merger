@@ -5,7 +5,7 @@ from tkinter.filedialog import askdirectory
 from tkinter.messagebox import showwarning, showerror, showinfo
 from string import Template
 
-class ApplicationGUI(tk.Frame):
+class AppGUI(tk.Frame):
 	def __init__(self, master = None):
 		tk.Frame.__init__(
 			self, 

@@ -1,5 +1,5 @@
-from application_gui import ApplicationGUI
+from app_gui import AppGUI
 
-app = ApplicationGUI()
+app = AppGUI()
 app.master.title("PDF Merger")
 app.mainloop()
