@@ -1,11 +1,11 @@
 import tkinter as tk
 import tkinter.font as tk_font
-import merge_pdf_files as file_merger
+import file_merger
 from tkinter.filedialog import askdirectory
 from tkinter.messagebox import showwarning, showerror, showinfo
 from string import Template
 
-class Application(tk.Frame):
+class AppGUI(tk.Frame):
 	def __init__(self, master = None):
 		tk.Frame.__init__(
 			self, 
@@ -234,9 +234,9 @@ class Application(tk.Frame):
 
 		info_message = Template(
 				"Seus arquivos foram unificados com sucesso. Você pode encontrá-los em ${destination}"
-			).substitute(destination = self.destination_path)
+		).substitute(destination = self.destination_path)
 
 		showinfo(
 			title = "Operação concluída.",
 			message = info_message
-    )
+    	)
