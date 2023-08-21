@@ -82,4 +82,4 @@ def merge_pdfs(files, pdf_name, origin, destination):
 		with fitz.open(pdf_path) as mfile:
 			result.insert_pdf(mfile)
 
-	result.save(Template("${directory}/${name}.pdf").substitute(directory = destination, name = pdf_name)) 				
+	result.save(Template("${destination_path}/${name}.pdf").substitute(destination_path = destination, name = pdf_name))
