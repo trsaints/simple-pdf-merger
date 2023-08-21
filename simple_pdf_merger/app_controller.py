@@ -3,10 +3,11 @@ from tkinter.filedialog import askdirectory
 from string import Template
 import file_merger
 
-def initialize(app, gui, title):
+def initialize(app, gui):
 	default_output = "Nenhuma pasta selecionada"
 
-	gui.master.title(title)
+	app.set_title("Simple PDF Merger")
+	gui.master.title(app.title)
 	set_actions(app, gui)
 	gui.render()
 	gui.update_path_output(

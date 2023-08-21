@@ -5,4 +5,4 @@ from app_controller import initialize
 app = App()
 gui = AppGUI()
 
-initialize(app, gui, "Simple PDF Merger")
+initialize(app, gui)
