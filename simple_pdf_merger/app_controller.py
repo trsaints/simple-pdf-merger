@@ -22,20 +22,26 @@ def initialize(app, gui):
 
 def set_actions(app, gui):
 	def set_origin(): 
-		path = get_path("Selecione a pasta com arquivos a unificar")
+		path = get_path("Selecione uma pasta com arquivos a unificar")
+
 		app.set_path("origin", path)
 		gui.update_path_output(
 			gui.origin_display,
 			path
 		)
+		print(Template("Origin path: ${origin}").substitute(origin = path))
+		
 
 	def set_destination(): 
-		path = get_path("Selecione a pasta de destino")
+		path = get_path("Selecione uma pasta de destino")
+
 		app.set_path("destination", path)
 		gui.update_path_output(
 			gui.destination_display,
 			path
 		)
+
+		print(Template("Destination path: ${destination}").substitute(destination = path))
 
 	def merge_files():
 		selection_status = check_selection(app)
@@ -63,7 +69,7 @@ def set_actions(app, gui):
 def get_path(message):
 	return askdirectory(title = message)
 
-def render_selection_error(self, target):		
+def render_selection_error(target):
 	if target == "origin":
 		showerror(
 			title = "Falha ao unificar arquivos",
@@ -79,11 +85,11 @@ def check_selection(app):
 	origin_status = getattr(app, "origin_path", None)
 	destination_status = getattr(app, "destination_path", None)
 	
-	if origin_status == None:
+	if origin_status == None or origin_status == "":
 		render_selection_error("origin")
 		return False
 
-	if destination_status == None:
+	if destination_status == None or destination_status == "":
 		render_selection_error("destination")	
 		return False
 
