@@ -10,6 +10,8 @@ def initialize(origin, destination):
 		
 		return	
 
+	print(Template("There are ${pdfs_length} files to be processed").substitute(pdfs_length = len(pdfs)))
+	
 	pdf_name = ""
 	current_file_group = []
    	
