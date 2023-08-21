@@ -1,8 +1,5 @@
 import tkinter as tk
 import tkinter.font as tk_font
-import file_merger
-from tkinter.filedialog import askdirectory
-from tkinter.messagebox import showwarning, showerror, showinfo
 from string import Template
 
 class AppGUI(tk.Frame):
@@ -15,6 +12,10 @@ class AppGUI(tk.Frame):
 			pady = 6
 		)
 
+		self.create_fonts()
+		self.create_widgets()
+	
+	def create_fonts(self):
 		self.main_font = tk_font.Font(
 			family = "Segoe UI", 
 			size = 12, 
@@ -29,22 +30,7 @@ class AppGUI(tk.Frame):
 			family = "Cascadia Mono",
 			size = 9,
 			weight = "normal"
-		)
-
-		self.grid(
-			sticky = tk.N+tk.E+tk.S+tk.W
-		)
-		self.create_widgets()
-		self.render_widgets()
-
-		self.update_static_display(
-			self.origin_display,
-			"Nenhuma pasta selecionada"
-		)
-		self.update_static_display(
-			self.destination_display,
-			"Nenhuma pasta selecionada"
-		)
+		)	
 
 	def create_widgets(self):
 		self.origin_label_frame = tk.LabelFrame(
@@ -65,21 +51,18 @@ class AppGUI(tk.Frame):
 			self.origin_label_frame, 
 			text = "Selecionar pasta", 
 			font = self.main_font, 
-			command = self.set_origin,
 			bg = "#bcb3b3"
 		)
 		self.destination_button = tk.Button(
 			self.destination_label_frame, 
 			text = "Selecionar pasta", 
 			font = self.main_font, 
-			command = self.set_destination,
 			bg = "#bcb3b3"
 		)
 		self.merge_button = tk.Button(
 			self, 
 			text = "Unificar PDFs", 
 			font = self.main_font, 
-			command = self.merge_files,
 			bg = "#48bf84",
 		)
 		self.origin_display = tk.Text(
@@ -101,7 +84,7 @@ class AppGUI(tk.Frame):
 			state = "disabled"
 		)
 		
-	def render_widgets(self):	
+	def render(self):	
 		self.origin_button.grid(
 			row = 0, 
 			column = 2, 
@@ -154,29 +137,9 @@ class AppGUI(tk.Frame):
 			pady = 8,
 			sticky = tk.NW
 		)
+		self.grid(sticky = tk.N+tk.E+tk.S+tk.W)
 
-	def get_path_message(self, target):
-		if target == "origin":
-			return "Selecione a pasta com os arquivos a serem unificados"
-		elif target == "destination":
-			return "Selecione a pasta de destino"
-	
-		return ""
-	
-	def get_path(self, target):
-		dialog_message = self.get_path_message(target)
-		target_path = askdirectory(title=dialog_message)
-		return target_path
-
-	def set_path(self, target):
-		target_path = self.get_path(target)
-		
-		if target == "origin":
-			self.origin_path = target_path
-		elif target == "destination":
-			self.destination_path = target_path
-
-	def update_static_display(self, target, text):
+	def update_path_output(self, target, text):
 		target.configure(state = "normal")
 		target.delete(
 			"1.00",
@@ -187,56 +150,3 @@ class AppGUI(tk.Frame):
 			text
 		)
 		target.configure(state = "disabled")
-
-	def set_origin(self):
-		self.set_path("origin")
-		self.update_static_display(self.origin_display, self.origin_path)
-
-	def set_destination(self):
-		self.set_path("destination")
-		self.update_static_display(self.destination_display, self.destination_path)	
-	
-	def render_selection_error(self, target):		
-		if target == "origin":
-			showerror(
-				title = "Falha ao unificar arquivos",
-				message = "Nenhuma pasta de origem foi selecionada"
-			)
-		elif target == "destination":
-			showerror(
-				title = "Falha ao unificar arquivos",
-				message = "Nenhuma pasta de destino foi selecionada"
-			)
-	
-	def check_selection(self):
-		origin_status = getattr(self, "origin_path", None)
-		destination_status = getattr(self, "destination_path", None)
-	
-		if origin_status == None:
-			self.render_selection_error("origin")
-			return False
-
-		if destination_status == None:
-			self.render_selection_error("destination")	
-			return False
-
-		return True
-
-	def merge_files(self):
-		selection_status = self.check_selection()
-
-		if selection_status == False: return
-
-		file_merger.initialize(
-			origin = self.origin_path, 
-			destination = self.destination_path
-		)		
-
-		info_message = Template(
-				"Seus arquivos foram unificados com sucesso. Você pode encontrá-los em ${destination}"
-		).substitute(destination = self.destination_path)
-
-		showinfo(
-			title = "Operação concluída.",
-			message = info_message
-    	)

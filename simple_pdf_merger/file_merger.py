@@ -30,6 +30,8 @@ def initialize(origin, destination):
 				origin, 
 				destination
 			)
+
+			print("The PDF files have been processed successfuly")
 			
 			break
 
