@@ -42,7 +42,7 @@ def set_actions(app, gui, log):
 			path
 		)
 
-		write_log(log, f"\nDestination path: {path}")
+		write_log(log, f"Destination path: {path}")
 
 	def merge_files():
 		selection_status = check_selection(app)
