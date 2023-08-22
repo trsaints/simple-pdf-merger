@@ -1,0 +1,3 @@
+Origin path: C:/Users/ThiagoRodriguesSanto/OneDrive - Unyleya Educacional/Documentos/NFs
+Destination path: C:/Users/ThiagoRodriguesSanto/OneDrive - Unyleya Educacional/Documentos/NFs/UNIFICADAS
+There are no PDF files to process in the current directory. Operation finished

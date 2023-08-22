@@ -2,13 +2,14 @@ from tkinter.messagebox import showwarning, showerror, showinfo
 from tkinter.filedialog import askdirectory
 from string import Template
 import file_merger
+from log_writer import write_log
 
-def initialize(app, gui):
-	default_output = "Nenhuma pasta selecionada"
+def initialize(app, gui, log):
+	default_output = "Nenhuma pasta selecionada"	
 
 	app.set_title("Simple PDF Merger")
 	gui.master.title(app.title)
-	set_actions(app, gui)
+	set_actions(app, gui, log)
 	gui.render()
 	gui.update_path_output(
 		gui.origin_display,
@@ -20,7 +21,7 @@ def initialize(app, gui):
 	)
 	gui.mainloop()
 
-def set_actions(app, gui):
+def set_actions(app, gui, log):
 	def set_origin(): 
 		path = get_path("Selecione uma pasta com arquivos a unificar")
 
@@ -29,7 +30,7 @@ def set_actions(app, gui):
 			gui.origin_display,
 			path
 		)
-		print(Template("Origin path: ${origin}").substitute(origin = path))
+		write_log(log, f"Origin path: {path}")
 		
 
 	def set_destination(): 
@@ -41,7 +42,7 @@ def set_actions(app, gui):
 			path
 		)
 
-		print(Template("Destination path: ${destination}").substitute(destination = path))
+		write_log(log, f"\nDestination path: {path}")
 
 	def merge_files():
 		selection_status = check_selection(app)
@@ -49,13 +50,12 @@ def set_actions(app, gui):
 		if selection_status == False: return
 
 		file_merger.initialize(
-			origin = app.origin_path, 
-			destination = app.destination_path
+			app.origin_path, 
+			app.destination_path,
+			log
 		)		
 
-		info_message = Template(
-			"Seus arquivos foram unificados com sucesso. Você pode encontrá-los em ${destination}"
-		).substitute(destination = app.destination_path)
+		info_message = f"Seus arquivos foram unificados com sucesso. Você pode encontrá-los em {app.destination_path}"
 
 		showinfo(
 			title = "Operação concluída.",

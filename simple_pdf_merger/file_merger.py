@@ -1,16 +1,16 @@
 from os import walk
-from string import Template
 import fitz
+from log_writer import write_log
 
-def initialize(origin, destination):
+def initialize(origin, destination, log):
 	pdfs = get_files(origin)
 
 	if len(pdfs) == 0:
-		print("There are no PDF files to process in the current directory. Operation finished")
+		write_log(log, "\nThere are no PDF files to process in the current directory. Operation finished")
 		
 		return	
 
-	print(Template("There are ${pdfs_length} files to be processed").substitute(pdfs_length = len(pdfs)))
+	write_log(log, f"\nThere are {len(pdfs)} files to be processed")
 	
 	pdf_name = ""
 	current_file_group = []
@@ -23,8 +23,7 @@ def initialize(origin, destination):
 		next_index = current_index + 1
     
 		if next_index >= len(pdfs):
-			message = Template("Merging the following files: ${files}").substitute(files = current_file_group)
-			print(message)
+			write_log(log, f"\nMerging the following files: {current_file_group}")
 			
 			merge_pdfs(
 				current_file_group, 
@@ -33,7 +32,7 @@ def initialize(origin, destination):
 				destination
 			)
 
-			print("The PDF files have been processed successfuly")
+			write_log(log, "\nThe PDF files have been processed successfuly")
 			
 			break
 
@@ -41,9 +40,8 @@ def initialize(origin, destination):
 
 		if next_pdf.startswith(pdf_name):
 			current_file_group.append(next_pdf)
-		else:	
-			message = Template("Merging the following files: ${files}").substitute(files = current_file_group)
-			print(message)
+		else:
+			write_log(log, f"\nMerging the following files: {current_file_group}")
 
 			merge_pdfs(
 				current_file_group,
