@@ -1,5 +1,0 @@
-[22/08/2023 - 17:52] Origin path: C:/Users/ThiagoRodriguesSanto/OneDrive - Unyleya Educacional/Documentos/NFs/NAO_UNIFICADAS
-[22/08/2023 - 17:52] Destination path: C:/Users/ThiagoRodriguesSanto/OneDrive - Unyleya Educacional/Documentos/NFs/UNIFICADAS
-[22/08/2023 - 17:52] There are 5 files to be processed
-[22/08/2023 - 17:52] Merging the following files: ['388976 - 388977 - 388979 - 388981.pdf', '388976 - 388977 - 388979 - 388981-1.pdf', '388976 - 388977 - 388979 - 388981-2.pdf', '388976 - 388977 - 388979 - 388981-3.pdf', '388976 - 388977 - 388979 - 388981-4.pdf']
-[22/08/2023 - 17:52] The PDF files have been processed successfuly
