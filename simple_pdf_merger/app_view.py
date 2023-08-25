@@ -55,7 +55,8 @@ def render_gui(gui):
 	)
 	gui.grid(sticky = tk.N+tk.E+tk.S+tk.W)
 
-def update_path_output(target, output):
-	target.configure(state = "normal")
-	target.delete("1.00", "end")
-	target.insert("end", output)
+def update_display_output(display, output):
+	display.configure(state = "normal")
+	display.delete("1.00", "end")
+	display.insert("end", output)
+	display.configure(state = "disabled")
