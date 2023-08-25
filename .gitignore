@@ -1,3 +1,2 @@
-*.pdf
 *.pyc
-./simple_pdf_merger/log/*.txt
+*.pdf
