@@ -1,6 +1,5 @@
 from tkinter.messagebox import showwarning, showerror, showinfo
 from tkinter.filedialog import askdirectory
-from string import Template
 import file_merger
 from log_writer import write_log
 from app_view import render_gui, update_display_output
