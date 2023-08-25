@@ -3,4 +3,6 @@ py -m pip install pymupdf
 py -m py_compile ./simple_pdf_merger/app.py
 py -m py_compile ./simple_pdf_merger/app_controller.py
 py -m py_compile ./simple_pdf_merger/app_gui.py
+py -m py_compile ./simple_pdf_merger/app_view.py
 py -m py_compile ./simple_pdf_merger/file_merger.py
+py -m py_compile ./simple_pdf_merger/log_writer.py
