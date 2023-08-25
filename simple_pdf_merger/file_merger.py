@@ -32,7 +32,7 @@ def initialize(origin, destination, log):
 				destination
 			)
 
-			write_log(log, "The PDF files have been processed successfuly")
+			write_log(log, "Files merged sucessfully. All PDF files have been processed")
 			
 			break
 
