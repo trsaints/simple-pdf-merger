@@ -3,7 +3,7 @@ from tkinter.filedialog import askdirectory
 from string import Template
 import file_merger
 from log_writer import write_log
-from app_view import render_gui, update_path_output
+from app_view import render_gui, update_display_output
 
 def initialize(app, gui, log):
 	default_output = "Nenhuma pasta selecionada"	
@@ -12,11 +12,11 @@ def initialize(app, gui, log):
 	gui.master.title(app.title)
 	set_actions(app, gui, log)
 	render_gui(gui)
-	update_path_output(
+	update_display_output(
 		gui.origin_display,
 		default_output
 	)
-	update_path_output(
+	update_display_output(
 		gui.destination_display,
 		default_output
 	)
@@ -27,7 +27,7 @@ def set_actions(app, gui, log):
 		path = get_path("Selecione uma pasta com arquivos a unificar")
 
 		app.set_path("origin", path)
-		update_path_output(
+		update_display_output(
 			gui.origin_display,
 			path
 		)
@@ -38,7 +38,7 @@ def set_actions(app, gui, log):
 		path = get_path("Selecione uma pasta de destino")
 
 		app.set_path("destination", path)
-		update_path_output(
+		update_display_output(
 			gui.destination_display,
 			path
 		)
