@@ -2,86 +2,109 @@ from os import walk
 from string import Template
 import fitz
 
+
 def initialize(origin, destination):
-	pdfs = get_files(origin)
+    pdfs = get_files(origin)
 
-	if len(pdfs) == 0:
-		print("There are no PDF files to process in the current directory. Operation finished")
-		
-		return	
+    if len(pdfs) == 0:
+        print(
+            "There are no PDF files to process in the current directory. Operation finished")
 
-	print(Template("There are ${pdfs_length} files to be processed").substitute(pdfs_length = len(pdfs)))
-	
-	pdf_name = ""
-	current_file_group = []
-   	
-	pdf_name = set_name(pdfs)
-	current_file_group.append(pdfs[0])
+        return
 
-	for current_pdf in pdfs:
-		current_index = pdfs.index(current_pdf)
-		next_index = current_index + 1
-    
-		if next_index >= len(pdfs):
-			message = Template("Merging the following files: ${files}").substitute(files = current_file_group)
-			print(message)
-			
-			merge_pdfs(
-				current_file_group, 
-				pdf_name, 
-				origin, 
-				destination
-			)
+    print(Template("There are ${pdfs_length} files to be processed").substitute(
+        pdfs_length=len(pdfs)))
 
-			print("The PDF files have been processed successfuly")
-			
-			break
+    pdf_name = ""
+    current_file_group = []
 
-		next_pdf = pdfs[next_index]
+    pdf_name = set_name(pdfs)
+    current_file_group.append(pdfs[0])
 
-		if next_pdf.startswith(pdf_name):
-			current_file_group.append(next_pdf)
-		else:	
-			message = Template("Merging the following files: ${files}").substitute(files = current_file_group)
-			print(message)
+    for current_pdf in pdfs:
+        current_index = pdfs.index(current_pdf)
+        next_index = current_index + 1
 
-			merge_pdfs(
-				current_file_group,
-				pdf_name,
-				origin, 
-				destination
-			)
+        if next_index >= len(pdfs):
+            message = f"Merging the following files: {current_file_group}"
+            print(message)
 
-			current_file_group = []
-			current_file_group.append(next_pdf)
+            try:
+                merge_pdfs(
+                    current_file_group,
+                    pdf_name,
+                    origin,
+                    destination
+                )
+            except Exception as e:
+                print(
+                    f"Failed to merge the following files {current_file_group}")
 
-			pdf_name = set_name(current_file_group)
+                continue
+
+            print("The PDF files have been processed successfuly")
+
+            break
+
+        next_pdf = pdfs[next_index]
+
+        if next_pdf.startswith(pdf_name):
+            current_file_group.append(next_pdf)
+        else:
+            message = f"Merging the following files: {current_file_group}"
+            print(message)
+
+            try:
+                merge_pdfs(
+                    current_file_group,
+                    pdf_name,
+                    origin,
+                    destination
+                )
+            except Exception as e:
+                print(
+                    f"Failed to merge the following files {current_file_group}")
+
+                continue
+
+            current_file_group = []
+            current_file_group.append(next_pdf)
+
+            pdf_name = set_name(current_file_group)
+
 
 def get_files(origin):
-	files = []
-	pdfs = []
+    files = []
+    pdfs = []
 
-	for (dirpath, dirnames, filenames) in walk(origin):
-		files.extend(filenames)
+    for (dirpath, dirnames, filenames) in walk(origin):
+        files.extend(filenames)
 
-		break
+        break
 
-	for current_file in files:
-		if current_file.endswith(".pdf"):
-			pdfs.append(current_file)
+    for current_file in files:
+        if current_file.endswith(".pdf"):
+            pdfs.append(current_file)
 
-	pdfs.sort(key=lambda x: x.replace(".pdf", ""))
-	return pdfs
+    pdfs.sort(key=lambda x: x.replace(".pdf", ""))
+    return pdfs
+
 
 def set_name(files):
-	return files[0].replace(".pdf", "")
+    return files[0].replace(".pdf", "")
+
 
 def merge_pdfs(files, pdf_name, origin, destination):
-	result = fitz.open()
-		
-	for pdf in files:
-		pdf_path = Template("${origin_path}/${file}").substitute(origin_path = origin, file = pdf)
-		with fitz.open(pdf_path) as mfile:
-			result.insert_pdf(mfile)
+    result = fitz.open()
 
-	result.save(Template("${destination_path}/${name}.pdf").substitute(destination_path = destination, name = pdf_name))
+    for pdf in files:
+        pdf_path = Template(
+            "${origin_path}/${file}").substitute(origin_path=origin, file=pdf)
+        with fitz.open(pdf_path) as mfile:
+            result.insert_pdf(mfile)
+
+    try:
+        result.save(Template("${destination_path}/${name}.pdf").substitute(
+            destination_path=destination, name=pdf_name))
+    except Exception as e:
+        raise e
