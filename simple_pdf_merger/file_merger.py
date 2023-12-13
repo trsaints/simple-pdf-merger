@@ -1,5 +1,4 @@
 from os import walk
-from string import Template
 import fitz
 
 
@@ -12,8 +11,7 @@ def initialize(origin, destination):
 
         return
 
-    print(Template("There are ${pdfs_length} files to be processed").substitute(
-        pdfs_length=len(pdfs)))
+    print(f"There are {len(pdfs)} files to be processed")
 
     pdf_name = ""
     current_file_group = []
@@ -40,7 +38,6 @@ def initialize(origin, destination):
                 print(
                     f"Failed to merge the following files {current_file_group}")
 
-                continue
 
             print("The PDF files have been processed successfuly")
 
@@ -61,11 +58,10 @@ def initialize(origin, destination):
                     origin,
                     destination
                 )
+
             except Exception as e:
                 print(
-                    f"Failed to merge the following files {current_file_group}")
-
-                continue
+                    f"Failed to merge the following files {current_file_group}, {e.__notes__}")
 
             current_file_group = []
             current_file_group.append(next_pdf)
@@ -98,13 +94,11 @@ def merge_pdfs(files, pdf_name, origin, destination):
     result = fitz.open()
 
     for pdf in files:
-        pdf_path = Template(
-            "${origin_path}/${file}").substitute(origin_path=origin, file=pdf)
+        pdf_path = f"{origin}/{pdf}"
         with fitz.open(pdf_path) as mfile:
             result.insert_pdf(mfile)
 
     try:
-        result.save(Template("${destination_path}/${name}.pdf").substitute(
-            destination_path=destination, name=pdf_name))
+        result.save(f"{destination}/{pdf_name}.pdf")
     except Exception as e:
         raise e
