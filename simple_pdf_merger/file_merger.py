@@ -11,7 +11,7 @@ def initialize(origin, destination):
 
         return
 
-    print(f"There are {len(pdfs)} files to be processed")
+    print(f"There are {len(pdfs)} files to be processed \n")
 
     pdf_name = ""
     current_file_group = []
@@ -24,22 +24,7 @@ def initialize(origin, destination):
         next_index = current_index + 1
 
         if next_index >= len(pdfs):
-            message = f"Merging the following files: {current_file_group}"
-            print(message)
-
-            try:
-                merge_pdfs(
-                    current_file_group,
-                    pdf_name,
-                    origin,
-                    destination
-                )
-            except Exception as e:
-                print(
-                    f"Failed to merge the following files {current_file_group}")
-
-
-            print("The PDF files have been processed successfuly")
+            merge(current_file_group, pdf_name, origin, destination)
 
             break
 
@@ -48,25 +33,14 @@ def initialize(origin, destination):
         if next_pdf.startswith(pdf_name):
             current_file_group.append(next_pdf)
         else:
-            message = f"Merging the following files: {current_file_group}"
-            print(message)
+            merge(current_file_group, pdf_name, origin, destination)
 
-            try:
-                merge_pdfs(
-                    current_file_group,
-                    pdf_name,
-                    origin,
-                    destination
-                )
-
-            except Exception as e:
-                print(
-                    f"Failed to merge the following files {current_file_group}, {e.__notes__}")
-
-            current_file_group = []
+            current_file_group.clear()
             current_file_group.append(next_pdf)
 
             pdf_name = set_name(current_file_group)
+
+    print("The operation has been finished.\n")
 
 
 def get_files(origin):
@@ -90,15 +64,43 @@ def set_name(files):
     return files[0].replace(".pdf", "")
 
 
-def merge_pdfs(files, pdf_name, origin, destination):
-    result = fitz.open()
+def merge_pdfs(files, pdf_name, origin_path, destination_path):
+    final_result = fitz.open()
 
     for pdf in files:
-        pdf_path = f"{origin}/{pdf}"
-        with fitz.open(pdf_path) as mfile:
-            result.insert_pdf(mfile)
+        pdf_path = f"{origin_path}/{pdf}"
+
+        try:
+            with fitz.open(pdf_path) as mfile:
+                final_result.insert_pdf(mfile)
+        except Exception as e:
+            raise e
 
     try:
-        result.save(f"{destination}/{pdf_name}.pdf")
+        final_result_path = f"{destination_path}/{pdf_name}.pdf"
+        final_result.save(final_result_path)
+
+        return final_result_path
     except Exception as e:
         raise e
+
+
+def merge(files, pdf_name, origin_path, destination_path):
+    print(f"Merging the following files: {files}")
+
+    try:
+        result_path = merge_pdfs(
+            files,
+            pdf_name,
+            origin_path,
+            destination_path
+        )
+
+        print(f"The files have been merged successfully\nOutput: {result_path}\n")
+
+        return result_path
+    except Exception:
+        print(
+            f"Failed to merge the following files {files}\n")
+
+        return files
