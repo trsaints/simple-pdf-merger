@@ -1,5 +1,6 @@
 from os import walk
 import fitz
+import re
 
 
 def initialize(origin, destination):
@@ -17,6 +18,7 @@ def initialize(origin, destination):
     current_file_group = []
 
     pdf_name = set_name(pdfs)
+    pdf_attachment_pattern = re.escape(pdf_name) + r"\d+"
     current_file_group.append(pdfs[0])
 
     for current_pdf in pdfs:
@@ -30,7 +32,7 @@ def initialize(origin, destination):
 
         next_pdf = pdfs[next_index]
 
-        if next_pdf.startswith(pdf_name):
+        if re.search(pdf_attachment_pattern, next_pdf, re.IGNORECASE):
             current_file_group.append(next_pdf)
         else:
             merge(current_file_group, pdf_name, origin, destination)
@@ -39,6 +41,7 @@ def initialize(origin, destination):
             current_file_group.append(next_pdf)
 
             pdf_name = set_name(current_file_group)
+            pdf_attachment_pattern = re.escape(pdf_name) + r"\d+"
 
     print("The operation has been finished.\n")
 
@@ -96,7 +99,8 @@ def merge(files, pdf_name, origin_path, destination_path):
             destination_path
         )
 
-        print(f"The files have been merged successfully\nOutput: {result_path}\n")
+        print(
+            f"The files have been merged successfully\nOutput: {result_path}\n")
 
         return result_path
     except Exception:
