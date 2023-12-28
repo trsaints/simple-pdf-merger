@@ -1,16 +1,17 @@
 from os import walk
 import fitz
 import re
-
+from datetime import datetime
 
 def initialize(origin, destination):
     pdfs = get_files(origin)
+    process_log = []
 
     if len(pdfs) == 0:
         print(
             "There are no PDF files to process in the current directory. Operation finished")
 
-        return
+        return process_log
 
     print(f"There are {len(pdfs)} files to be processed \n")
 
@@ -26,7 +27,8 @@ def initialize(origin, destination):
         next_index = current_index + 1
 
         if next_index >= len(pdfs):
-            merge(current_file_group, pdf_name, origin, destination)
+            merge_output = merge(current_file_group, pdf_name, origin, destination)
+            process_log.append(merge_output)
 
             break
 
@@ -35,7 +37,8 @@ def initialize(origin, destination):
         if re.search(pdf_attachment_pattern, next_pdf, re.IGNORECASE):
             current_file_group.append(next_pdf)
         else:
-            merge(current_file_group, pdf_name, origin, destination)
+            merge_output = merge(current_file_group, pdf_name, origin, destination)
+            process_log.append(merge_output)
 
             current_file_group.clear()
             current_file_group.append(next_pdf)
@@ -44,6 +47,8 @@ def initialize(origin, destination):
             pdf_attachment_pattern = re.escape(pdf_name) + r"\d+"
 
     print("The operation has been finished.\n")
+
+    return process_log
 
 
 def get_files(origin):
@@ -91,6 +96,9 @@ def merge_pdfs(files, pdf_name, origin_path, destination_path):
 def merge(files, pdf_name, origin_path, destination_path):
     print(f"Merging the following files: {files}")
 
+    current_date = datetime.now()
+    formatted_date = current_date.strftime("[%d/%m/%Y - %H:%M:%S]")
+
     try:
         result_path = merge_pdfs(
             files,
@@ -102,9 +110,9 @@ def merge(files, pdf_name, origin_path, destination_path):
         print(
             f"The files have been merged successfully\nOutput: {result_path}\n")
 
-        return result_path
+        return f"{formatted_date} - {files} - {result_path} - Success"
     except Exception:
         print(
             f"Failed to merge the following files {files}\n")
 
-        return files
+        return f"{formatted_date} - {files} - N/A - Failed"
