@@ -1,28 +1,19 @@
-from tkinter.messagebox import showwarning, showerror, showinfo
+from tkinter.messagebox import showinfo
 from tkinter.filedialog import askdirectory
 import file_merger
 from log_writer import write_log
-from app_view import render_gui, update_display_output
+from app_view import render_gui, update_display_output, render_selection_error
 from log_writer import open_log
 
 
 def initialize(app, gui):
     process_log = open_log("./log/process.txt")
-    default_output = "Nenhuma pasta selecionada"
 
     app.set_title("Simple PDF Merger")
     gui.master.title(app.title)
 
     set_actions(app, gui, process_log)
     render_gui(gui)
-    update_display_output(
-        gui.origin_display,
-        default_output
-    )
-    update_display_output(
-        gui.destination_display,
-        default_output
-    )
 
     gui.mainloop()
 
@@ -57,16 +48,12 @@ def set_actions(app, gui, log):
             app.origin_path,
             app.destination_path
         )
-        formatted_merge_output = str(merge_output).replace(
-            ",", "\n"
-        ).replace(
-            "\"", ""
-        )
-        
+
         if len(merge_output) > 1:
             info_message = f"Seus arquivos foram unificados com sucesso. Você pode encontrá-los em {app.destination_path}"
 
-            write_log(log, formatted_merge_output)
+            for merge_log in merge_output:
+                write_log(log, merge_log)
         else:
             info_message = "Nenhum arquivo foi processado. Verifique o caminho de origem dos arquivos."
 
@@ -84,29 +71,19 @@ def get_path(message):
     return askdirectory(title=message)
 
 
-def render_selection_error(selection):
-    if selection == "origin":
-        showerror(
-            title="Falha ao unificar arquivos",
-            message="Nenhuma pasta de origem foi selecionada"
-        )
-    elif selection == "destination":
-        showerror(
-            title="Falha ao unificar arquivos",
-            message="Nenhuma pasta de destino foi selecionada"
-        )
-
-
 def check_selection(app):
     origin_status = getattr(app, "origin_path", None)
     destination_status = getattr(app, "destination_path", None)
 
-    if origin_status == None or origin_status == "":
+    origin_is_unset = origin_status == None or origin_status == ""
+    destination_is_unset = destination_status == None or destination_status == ""
+
+    if origin_is_unset:
         render_selection_error("origin")
 
         return False
 
-    if destination_status == None or destination_status == "":
+    if destination_is_unset:
         render_selection_error("destination")
 
         return False
