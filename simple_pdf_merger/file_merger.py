@@ -3,6 +3,7 @@ import fitz
 import re
 from datetime import datetime
 
+
 def initialize(origin, destination):
     pdfs = get_files(origin)
     process_log = []
@@ -19,7 +20,7 @@ def initialize(origin, destination):
     current_file_group = []
 
     pdf_name = set_name(pdfs)
-    pdf_attachment_pattern = re.escape(pdf_name) + r"\d+"
+    pdf_attachment_pattern = re.compile(rf"{re.escape(pdf_name)}\-\d+")
     current_file_group.append(pdfs[0])
 
     for current_pdf in pdfs:
@@ -27,24 +28,26 @@ def initialize(origin, destination):
         next_index = current_index + 1
 
         if next_index >= len(pdfs):
-            merge_output = merge(current_file_group, pdf_name, origin, destination)
+            merge_output = merge(current_file_group,
+                                 pdf_name, origin, destination)
             process_log.append(merge_output)
 
             break
 
         next_pdf = pdfs[next_index]
 
-        if re.search(pdf_attachment_pattern, next_pdf, re.IGNORECASE):
+        if re.search(pdf_attachment_pattern, next_pdf):
             current_file_group.append(next_pdf)
         else:
-            merge_output = merge(current_file_group, pdf_name, origin, destination)
+            merge_output = merge(current_file_group,
+                                 pdf_name, origin, destination)
             process_log.append(merge_output)
 
             current_file_group.clear()
             current_file_group.append(next_pdf)
 
             pdf_name = set_name(current_file_group)
-            pdf_attachment_pattern = re.escape(pdf_name) + r"\d+"
+            pdf_attachment_pattern = re.compile(rf"{re.escape(pdf_name)}\-\d+")
 
     print("The operation has been finished.\n")
 
