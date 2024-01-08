@@ -7,7 +7,7 @@ from log_writer import open_log
 
 
 def initialize(app, gui):
-    process_log = open_log("./log/process.txt")
+    process_log = open_log("./log/merge.log")
 
     app.set_title("Simple PDF Merger")
     gui.master.title(app.title)
@@ -49,7 +49,7 @@ def set_actions(app, gui, log):
             app.destination_path
         )
 
-        if len(merge_output) > 1:
+        if len(merge_output) >= 1:
             info_message = f"Seus arquivos foram unificados com sucesso. Você pode encontrá-los em {app.destination_path}"
 
             for merge_log in merge_output:
