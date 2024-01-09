@@ -11,4 +11,4 @@ def write_log(log, content):
     hasWritable = hasattr(log, 'writable') and callable(log.writable)
 
     if hasWritable and log.writable():
-        log.write(content)
+        log.write(f"{content}\n")

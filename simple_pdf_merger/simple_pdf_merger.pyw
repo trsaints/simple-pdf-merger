@@ -1,8 +1,8 @@
-from app import App
-from app_gui import AppGUI
-from app_controller import initialize
+from controller import app_controller
+from models.app import App
+from models.app_gui import AppGUI
 
 app = App()
 gui = AppGUI()
 
-initialize(app, gui)
+app_controller.initialize(app, gui)

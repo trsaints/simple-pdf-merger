@@ -1,7 +1,6 @@
 import tkinter as tk
-from app_fonts import insert_fonts
-from app_widgets import insert_widgets
-
+from components.app_fonts import insert_fonts
+from components.app_widgets import insert_widgets
 
 class AppGUI(tk.Frame):
     def __init__(self, master=None):

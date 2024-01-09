@@ -1,10 +1,8 @@
 from tkinter.messagebox import showinfo
 from tkinter.filedialog import askdirectory
-import file_merger
-from log_writer import write_log
-from app_view import render_gui, update_display_output, render_selection_error
-from log_writer import open_log
-
+from services import file_merger
+from views.app_view import render_gui, render_selection_error, update_display_output
+from services.log_writer import open_log, write_log
 
 def initialize(app, gui):
     process_log = open_log("./log/merge.log")
