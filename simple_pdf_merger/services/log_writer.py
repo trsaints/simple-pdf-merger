@@ -1,10 +1,16 @@
-def open_log(file_path):
+def open_log(log_path):
     try:
-        return open(file_path, "w", encoding="utf-8")
+        print(f"Opening log as write mode in {log_path}")
+
+        return open(log_path, "w", encoding="utf-8")
+    except FileNotFoundError:
+        print(f"File not found. Creating new log in {log_path}")
+
+        return open(log_path, "x", encoding="utf-8")
     except PermissionError:
         print("Could not open log file in write mode: permission denied.")
 
-        return open(file_path, "r", encoding="utf-8")
+        return open(log_path, "r", encoding="utf-8")
 
 
 def write_log(log, content):

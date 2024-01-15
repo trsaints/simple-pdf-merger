@@ -3,9 +3,11 @@ from tkinter.filedialog import askdirectory
 from services import file_merger
 from views.app_view import render_gui, render_selection_error, update_display_output
 from services.log_writer import open_log, write_log
+from os import getlogin
 
 def initialize(app, gui):
-    process_log = open_log("./log/merge.log")
+    current_user = getlogin()
+    process_log = open_log(f"C:/Users/{current_user}/Documents/merge.log")
 
     app.set_title("Simple PDF Merger")
     gui.master.title(app.title)
